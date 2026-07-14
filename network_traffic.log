@@ -1,0 +1,8 @@
+2026-07-15 10:11:01 INFO Connection established from 192.168.1.50 to port 80
+2026-07-15 10:12:43 WARNING Latency spike detected on gateway 10.0.0.1 (120ms)
+2026-07-15 10:14:22 ERROR Connection timeout from 192.168.1.104 to port 443
+2026-07-15 10:15:05 INFO VPN handshake successful for user_jovin on 192.168.1.22
+2026-07-15 10:16:11 ERROR Authentication failed from 198.51.100.12 (unauthorized port access)
+2026-07-15 10:17:30 INFO Packet transmission complete for 192.168.1.50
+2026-07-15 10:18:02 ERROR Connection timeout from 192.168.1.104 to port 80
+2026-07-15 10:19:15 ERROR Authentication failed from 198.51.100.12 (invalid credentials)

@@ -1,0 +1,5 @@
+Timestamp,Level,Source_IP,Message
+2026-07-15 10:14:22,ERROR,192.168.1.104,Connection timeout from 192.168.1.104 to port 443
+2026-07-15 10:16:11,ERROR,198.51.100.12,Authentication failed from 198.51.100.12 (unauthorized port access)
+2026-07-15 10:18:02,ERROR,192.168.1.104,Connection timeout from 192.168.1.104 to port 80
+2026-07-15 10:19:15,ERROR,198.51.100.12,Authentication failed from 198.51.100.12 (invalid credentials)
