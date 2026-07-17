@@ -106,8 +106,10 @@ def analyze_logs(log_file_path, output_csv_path):
         print(f"[Error] An unexpected failure occurred: {e}")
 
 if __name__ == "__main__":
-    # Define input and output targets
-    log_input = "network_traffic.log"
-    csv_output = "critical_errors_report.csv"
-    
+    import sys
+
+    # Accept paths as arguments, with the old names as defaults
+    log_input = sys.argv[1] if len(sys.argv) > 1 else "network_traffic.log"
+    csv_output = sys.argv[2] if len(sys.argv) > 2 else "critical_errors_report.csv"
+
     analyze_logs(log_input, csv_output)
