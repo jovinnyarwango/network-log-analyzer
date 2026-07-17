@@ -1,26 +1,51 @@
-# Network Log Analyzer & Reporter
+# Network Log Analyzer
 
-A lightweight, automated Python utility designed to parse raw network log files, isolate critical system errors, and export structured data reports. This tool is built to bridge traditional Network Operations Center (NOC) log monitoring with modern DevOps/SysOps troubleshooting workflows.
+Python tool that parses raw network logs, isolates ERROR-level events,
+identifies high-frequency error-generating IPs, and exports a CSV
+report. Containerized with Docker and deployed to AWS ECS Fargate
+through a GitHub Actions CI/CD pipeline.
 
-## Features
-- **Regex-Based Parsing:** Efficiently scans syslog-style logs to extract timestamps, log levels, and messages.
-- **Anomalous IP Tracking:** Leverages regular expressions to isolate IP addresses tied to connection timeouts or unauthorized access.
-- **Automatic Report Generation:** Compiles and exports structured, clean `critical_errors_report.csv` files.
-- **Console Dashboard:** Outputs a clean execution summary of network health directly to the terminal.
+## What it does
 
-## Technologies Used
-- **Language:** Python 3.x
-- **Libraries:** `re` (Regular Expressions), `csv` (Data Export), `collections` (Frequency Analysis)
+- Parses timestamped logs (INFO / WARNING / ERROR) with regex
+- Extracts source IPs from error messages and ranks top offenders
+- Prints a summary and exports detailed errors to CSV
+- Pure Python standard library — no dependencies
 
-## How It Works
-The script processes raw logs line-by-line, matching them against a strict pattern:
-`YYYY-MM-DD HH:MM:SS [LEVEL] [MESSAGE]`
+## Run locally
 
-If an `ERROR` flag is raised, the script isolates the source IP and writes the entry to an automated report.
+    python log_analyzer.py [input.log] [report.csv]
 
-## How to Run This Project
+Arguments are optional; defaults are `network_traffic.log` and
+`critical_errors_report.csv`.
 
-1. **Clone this repository:**
-   ```bash
-   git clone https://github.com/jovinnyarwango/network-log-analyzer.git
-   cd network-log-analyzer
+## Run with Docker
+
+    docker build -t log-analyzer .
+    docker run --rm -v "$(pwd):/data" log-analyzer \
+      /data/network_traffic.log /data/report.csv
+
+The image contains code only; input data is mounted at runtime, so
+the same image runs against any log file.
+
+## Cloud deployment (AWS)
+
+- **ECR** — images are stored in a private registry
+- **ECS Fargate** — the task definition in `task-definition.json`
+  runs the analyzer serverlessly (0.25 vCPU / 512MB, awslogs driver)
+- **CloudWatch Logs** — container output streams to
+  `/ecs/log-analyzer`
+
+## CI/CD
+
+Every push to `main` triggers `.github/workflows/deploy.yml`, which
+builds the image on GitHub-hosted runners and pushes it to ECR with
+two tags: `latest` and the commit SHA (for traceable rollbacks).
+Authentication uses a dedicated least-privilege IAM user via
+encrypted repository secrets.
+
+## Roadmap
+
+- Pull input logs from S3 via a task role instead of baking the
+  sample log into the image
+- Scheduled runs via EventBridge
