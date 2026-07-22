@@ -19,7 +19,7 @@ LOG_PATTERN = re.compile(
 )
 
 # Regex to safely extract IP addresses from log messages
-IP_PATTERN = re.compile(r'\b(?:\d{1,3}\.){2}\d{1,3}\b')
+IP_PATTERN = re.compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b')
 
 def analyze_logs(log_file_path, output_csv_path):
     print(f"[*] Starting analysis on: {log_file_path}")
